@@ -4,6 +4,7 @@ layui.define(["element", "jquery"], function (exports) {
         layer = layui.layer,
         $body = $("body"),
         $root = $("#LAY_app"),
+        $themeStyle = $('#LAY_layadmin_theme'),
         shrinkModeClass = "layadmin-side-shrink",
         $shrinkToggle = $("#LAY_app_flexible"),
         $shrinkToggleIcon = $("#LAY_app_flexible>.layui-icon"),
@@ -14,219 +15,226 @@ layui.define(["element", "jquery"], function (exports) {
         fullScreenIconClass = "layui-icon-screen-full",
         exitScreenIconClass = "layui-icon-screen-restore",
         menuTab = "layadmin-layout-tabs",
+        $tabHeader = $("#LAY_app_tabsheader"),
+        layuiShow = "layui-show",
+        layuiHide = "layui-hide",
+        layuiThis = "layui-this",
+        tabCurrentIndex = 0,
         SF = function () {
             /**
-             *  系统配置
+             * 系统配置
              * @param name
-             * @returns {{BgColorDefault: number, urlSuffixDefault: boolean}|*}
              */
-            this.config = function (name) {
-                var config = {
-                    urlHashLocation: true,   // URL地址hash定位
-                    urlSuffixDefault: true, // URL后缀
-                    BgColorDefault: 0,       // 默认皮肤（0开始）
-                    checkUrlDefault: false,   // 是否判断URL有效
+            this.config = function (key) {
+                var configObj = {
+                    themeId: 0,
                 };
-                if (name == undefined) {
-                    return config;
-                } else {
-                    return config[name];
-                }
+                return configObj[key];
             };
-            /**
-            * 初始化背景色
-            */
-            this.initBgColor = function () {
-                var bgcolorId = sessionStorage.getItem('layuiminiBgcolorId');
-                if (bgcolorId == null || bgcolorId == undefined || bgcolorId == '') {
-                    bgcolorId = this.config('BgColorDefault');
-                }
-                var bgcolorData = this.bgColorConfig(bgcolorId);
-                var styleHtml = '.layui-layout-admin .layui-header{background-color:' + bgcolorData.headerRight + '!important;}\n' +
-                    '.layui-header>ul>.layui-nav-item.layui-this,.layuimini-tool i:hover{background-color:' + bgcolorData.headerRightThis + '!important;}\n' +
-                    '.layui-layout-admin .layui-logo {background-color:' + bgcolorData.headerLogo + '!important;}\n' +
-                    '.layui-side.layui-bg-black,.layui-side.layui-bg-black>.layui-left-menu>ul {background-color:' + bgcolorData.menuLeft + '!important;}\n' +
-                    '.layui-left-menu .layui-nav .layui-nav-child a:hover:not(.layui-this) {background-color:' + bgcolorData.menuLeftHover + ';}\n' +
-                    '.layui-layout-admin .layui-nav-tree .layui-this, .layui-layout-admin .layui-nav-tree .layui-this>a, .layui-layout-admin .layui-nav-tree .layui-nav-child dd.layui-this, .layui-layout-admin .layui-nav-tree .layui-nav-child dd.layui-this a {\n' +
-                    '    background-color: ' + bgcolorData.menuLeftThis + ' !important;\n' +
-                    '}';
-                $('#layuimini-bg-color').html(styleHtml);
-            };
-            /**
-             * 配色方案配置项(默认选中第一个方案)
-             * @param bgcolorId
-             */
-            this.bgColorConfig = function (bgcolorId) {
-                var bgColorConfig = [
-                    {
-                        headerRight: '#1aa094',
-                        headerRightThis: '#197971',
-                        headerLogo: '#243346',
-                        menuLeft: '#2f4056',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#23262e',
-                        headerRightThis: '#0c0c0c',
-                        headerLogo: '#0c0c0c',
-                        menuLeft: '#23262e',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#ffa4d1',
-                        headerRightThis: '#bf7b9d',
-                        headerLogo: '#e694bd',
-                        menuLeft: '#1f1f1f',
-                        menuLeftThis: '#ffa4d1',
-                        menuLeftHover: '#1f1f1f',
-                    },
-                    {
-                        headerRight: '#1aa094',
-                        headerRightThis: '#197971',
-                        headerLogo: '#0c0c0c',
-                        menuLeft: '#23262e',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#1e9fff',
-                        headerRightThis: '#0069b7',
-                        headerLogo: '#0c0c0c',
-                        menuLeft: '#1f1f1f',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
+            this.themeId = this.config("themeId");
+            this.themeList = [{
+                    headerBgColor: '#1aa094',
+                    headerColor: "#FFF",
+                    logoBgColor: '#243346',
+                    leftMenuBgColor: '#2f4056',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#FFF',
+                    headerColor: "#333",
+                    logoBgColor: '#243346',
+                    leftMenuBgColor: '#2f4056',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#23262e',
+                    headerColor: "#FFF",
+                    logoBgColor: '#0c0c0c',
+                    leftMenuBgColor: '#23262e',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#ffa4d1',
+                    headerColor: "#FFF",
+                    logoBgColor: '#e694bd',
+                    leftMenuBgColor: '#1f1f1f',
+                    leftMenuActiveBgColor: '#ffa4d1',
+                    leftMenuHoverBgColor: '#1f1f1f',
+                },
+                {
+                    headerBgColor: '#1aa094',
+                    headerColor: "#FFF",
+                    logoBgColor: '#0c0c0c',
+                    leftMenuBgColor: '#23262e',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#1e9fff',
+                    headerColor: "#FFF",
+                    logoBgColor: '#0c0c0c',
+                    leftMenuBgColor: '#1f1f1f',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
 
-                    {
-                        headerRight: '#ffb800',
-                        headerRightThis: '#d09600',
-                        headerLogo: '#243346',
-                        menuLeft: '#2f4056',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#e82121',
-                        headerRightThis: '#ae1919',
-                        headerLogo: '#0c0c0c',
-                        menuLeft: '#1f1f1f',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#963885',
-                        headerRightThis: '#772c6a',
-                        headerLogo: '#243346',
-                        menuLeft: '#2f4056',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#1e9fff',
-                        headerRightThis: '#0069b7',
-                        headerLogo: '#0069b7',
-                        menuLeft: '#1f1f1f',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#ffb800',
-                        headerRightThis: '#d09600',
-                        headerLogo: '#d09600',
-                        menuLeft: '#2f4056',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#e82121',
-                        headerRightThis: '#ae1919',
-                        headerLogo: '#d91f1f',
-                        menuLeft: '#1f1f1f',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    },
-                    {
-                        headerRight: '#963885',
-                        headerRightThis: '#772c6a',
-                        headerLogo: '#772c6a',
-                        menuLeft: '#2f4056',
-                        menuLeftThis: '#1aa094',
-                        menuLeftHover: '#3b3f4b',
-                    }
-                ];
-                if (bgcolorId == undefined) {
-                    return bgColorConfig;
-                } else {
-                    return bgColorConfig[bgcolorId];
+                {
+                    headerBgColor: '#ffb800',
+                    headerColor: "#FFF",
+                    logoBgColor: '#243346',
+                    leftMenuBgColor: '#2f4056',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#e82121',
+                    headerColor: "#FFF",
+                    logoBgColor: '#0c0c0c',
+                    leftMenuBgColor: '#1f1f1f',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#963885',
+                    headerColor: "#FFF",
+                    logoBgColor: '#243346',
+                    leftMenuBgColor: '#2f4056',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#1e9fff',
+                    headerColor: "#FFF",
+                    logoBgColor: '#0069b7',
+                    leftMenuBgColor: '#1f1f1f',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#ffb800',
+                    headerColor: "#FFF",
+                    logoBgColor: '#d09600',
+                    leftMenuBgColor: '#2f4056',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#e82121',
+                    headerColor: "#FFF",
+                    logoBgColor: '#d91f1f',
+                    leftMenuBgColor: '#1f1f1f',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
+                },
+                {
+                    headerBgColor: '#963885',
+                    headerColor: "#FFF",
+                    logoBgColor: '#772c6a',
+                    leftMenuBgColor: '#2f4056',
+                    leftMenuActiveBgColor: '#1aa094',
+                    leftMenuHoverBgColor: '#3b3f4b',
                 }
+            ];
+            /**
+             * 设置主题
+             * @param themeId
+             */
+            this.setTheme = function (themeId) {
+                var themeData = this.getThemeData(themeId);
+                var styleHtml = ".layui-side-menu,.layadmin-pagetabs .layui-tab-title li:after,.layadmin-pagetabs .layui-tab-title li.layui-this:after,.layui-layer-admin .layui-layer-title,.layadmin-side-shrink .layui-side-menu .layui-nav>.layui-nav-item>.layui-nav-child{background-color:" + themeData.leftMenuBgColor + " !important;}" +
+                    ".layui-nav-tree .layui-this,.layui-nav-tree .layui-this>a,.layui-nav-tree .layui-nav-child dd.layui-this,.layui-nav-tree .layui-nav-child dd.layui-this a{background-color:" + themeData.leftMenuActiveBgColor + " !important;}" +
+                    ".layui-layout-admin .layui-header{background-color:" + themeData.headerBgColor + " !important;}" +
+                    ".layui-layout-admin .layui-header a, .layui-layout-admin .layui-header a cite, .layui-layout-admin{color:" + themeData.headerColor + " !important;}" +
+                    ".layui-layout-admin .layui-header .layui-nav .layui-nav-more{border-top-color:" + themeData.headerColor + " !important;}" +
+                    ".layui-layout-admin .layui-header .layui-nav .layui-nav-bar{background-color:" + themeData.headerColor + " !important;}" +
+                    ".layui-layout-admin .layui-logo{background-color:" + themeData.logoBgColor + " !important;}";
+                $themeStyle.html(styleHtml);
             };
             /**
-             * 构建背景颜色选择
-             * @returns {string}
+             * 获取主题样式数据
+             * @param themeId
+             * @return {}
              */
-            this.buildBgColorHtml = function () {
-                var html = '';
-                var bgcolorId = sessionStorage.getItem('layuiminiBgcolorId');
-                if (bgcolorId == null || bgcolorId == undefined || bgcolorId == '') {
-                    bgcolorId = 0;
-                }
-                var bgColorConfig = this.bgColorConfig();
-                $.each(bgColorConfig, function (key, val) {
-                    if (key == bgcolorId) {
-                        html += '<li class="layui-this" layadmin-event="selectTheme" data-select-bgcolor="' + key + '">\n';
+            this.getThemeData = function (themeId) {
+                var sessionThemeId = sessionStorage.getItem('themeId');
+                var configThemeId = this.themeId;
+                var useThemeId = themeId || sessionThemeId || configThemeId || 0;
+                this.themeId = useThemeId;
+                return this.themeList[useThemeId];
+            };
+            /**
+             * 构建主题选择html
+             * @return {string}
+             */
+            this.buildThemeSelectHtml = function () {
+                var html = "";
+                var themeId = this.themeId;
+                $.each(this.themeList, function (key, val) {
+                    if (key == themeId) {
+                        html += '<li layadmin-event="selectTheme" class="sf-theme-active" data-theme-id="' + key + '">';
                     } else {
-                        html += '<li layadmin-event="selectTheme" data-select-bgcolor="' + key + '">\n';
+                        html += '<li layadmin-event="selectTheme" data-theme-id="' + key + '">';
                     }
-                    html += '<a href="javascript:;" data-skin="skin-blue" style="" class="clearfix full-opacity-hover">\n' +
-                        '<div><span style="display:block; width: 20%; float: left; height: 12px; background: ' + val.headerLogo + ';"></span><span style="display:block; width: 80%; float: left; height: 12px; background: ' + val.headerRight + ';"></span></div>\n' +
-                        '<div><span style="display:block; width: 20%; float: left; height: 40px; background: ' + val.menuLeft + ';"></span><span style="display:block; width: 80%; float: left; height: 40px; background: #f4f5f7;"></span></div>\n' +
-                        '</a>\n' +
-                        '</li>';
+                    html += '<ul>' +
+                        '<li style="background-color: ' + val.logoBgColor + '"></li>' +
+                        '<li style="background-color: ' + val.headerBgColor + '"></li>' +
+                        '<li style="background-color: ' + val.leftMenuBgColor + '"></li></ul></li>';
                 });
                 return html;
             };
+            this.themeSelectHtml = this.buildThemeSelectHtml();
             /**
-             * 打开新窗口
+             * 添加新Tab
              * @param tabId
              * @param href
              * @param title
+             * @param addSession
              */
-            this.addTab = function (tabId, href, title, addSession) {
-                if (addSession == undefined || addSession == true) {
-                    var layuiminiTabInfo = JSON.parse(sessionStorage.getItem("layuiminiTabInfo"));
-                    if (layuiminiTabInfo == null) {
-                        layuiminiTabInfo = {};
+            this.tabAdd = function (tabId, href, title, addSession) {
+                // 前端储存
+
+                var hadOpen = false;
+                $.each($tabHeader.children(), function (index, item) {
+                    if ($(item).attr("lay-id") === tabId) {
+                        hadOpen = true;
+                        return;
                     }
-                    layuiminiTabInfo[tabId] = { href: href, title: title }
-                    sessionStorage.setItem("layuiminiTabInfo", JSON.stringify(layuiminiTabInfo));
-                }
-                element.tabAdd(menuTab, {
-                    title: title + '<i data-tab-close="" class="layui-icon layui-unselect layui-tab-close">ဆ</i>' //用于演示
-                    , content: '<iframe width="100%" height="100%" frameborder="0"  src="' + href + '"></iframe>'
-                    , id: tabId
                 });
+                if (hadOpen) {
+                    this.tabChange(tabId);
+                } else {
+                    element.tabAdd(menuTab, {
+                        title: title,
+                        content: '<iframe width="100%" height="100%" frameborder="0" src="' + href + '"></iframe>',
+                        id: tabId
+                    });
+                }
             };
-            this.tabAdd = function () {
-                //新增一个Tab项
-                element.tabAdd('demo', {
-                    title: '新选项' + (Math.random() * 1000 | 0) //用于演示
-                    , content: '内容' + (Math.random() * 1000 | 0)
-                    , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
-                })
+            /**
+             * 删除指定Tab项
+             * @param tabId
+             */
+            this.tabDelete = function (tabId) {
+                element.tabDelete(menuTab, tabId);
             };
-            this.tabDelete = function (othis) {
-                //删除指定Tab项
-                element.tabDelete('demo', '44'); //删除：“商品管理”
+            /**
+             * 切换到指定Tab项
+             * @param tabId
+             */
+            this.tabChange = function (tabId) {
+                element.tabChange(menuTab, tabId);
+            };
+            /**
+             * 选中指定menu
+             * @param tabId
+             */
+            this.tabChange = function (tabId) {
+                element.tabChange(menuTab, tabId);
+            };
 
-
-                othis.addClass('layui-btn-disabled');
-            };
-            this.tabChange = function () {
-                //切换到指定Tab项
-                element.tabChange('demo', '22'); //切换到：用户管理
-            };
         },
         sf = new SF(),
         // 事件处理
@@ -245,41 +253,33 @@ layui.define(["element", "jquery"], function (exports) {
             },
             // 主题色切换
             theme: function () {
-                var loading = layer.load(0, { shade: false, time: 2 * 1000 });
-                var clientHeight = (document.documentElement.clientHeight) - 95;
-                var bgColorHtml = sf.buildBgColorHtml();
-                var html = '<div class="layuimini-color">\n' +
-                    '<div class="color-title">\n' +
-                    '<span>配色方案</span>\n' +
-                    '</div>\n' +
-                    '<div class="color-content">\n' +
-                    '<ul>\n' + bgColorHtml + '</ul>\n' +
-                    '</div>\n' +
+                var html = '<div class="sf-theme">' +
+                    '<div class="sf-theme-title">配色方案</div>' +
+                    '<ul class="sf-theme-content">' + sf.themeSelectHtml + '</ul>' +
                     '</div>';
                 layer.open({
                     type: 1,
                     title: false,
                     closeBtn: 0,
-                    shade: 0.2,
-                    anim: 2,
+                    shade: 0.1,
+                    anim: -1,
                     shadeClose: true,
-                    id: 'layuiminiBgColor',
-                    area: ['340px', clientHeight + 'px'],
-                    offset: 'rb',
-                    content: html,
-                    end: function () {
-                        $('.layuimini-select-bgcolor').removeClass('layui-this');
-                    }
+                    id: "sfThemeBox",
+                    area: "300px",
+                    offset: "r",
+                    skin: "layui-anim layui-anim-rl layui-layer-adminRight",
+                    content: html
                 });
-                layer.close(loading);
             },
             // 选择主题处理
             selectTheme: function (e) {
-                var bgcolorId = e.attr("data-select-bgcolor");
-                $('.layuimini-color .color-content ul .layui-this').attr('class', '');
-                e.attr('class', 'layui-this');
-                sessionStorage.setItem('layuiminiBgcolorId', bgcolorId);
-                sf.initBgColor();
+                var themeId = e.attr("data-theme-id");
+                e.siblings().removeClass("sf-theme-active");
+                e.addClass("sf-theme-active");
+                sf.setTheme(themeId);
+
+                // 前端用户喜好存储
+                sessionStorage.setItem('themeId', themeId);
             },
             // 全屏切换
             fullscreen: function () {
@@ -299,18 +299,49 @@ layui.define(["element", "jquery"], function (exports) {
             },
             // 页面连接
             pageLink: function (e) {
-                debugger
-                sf.addTab("a", "/aaa", "xxxxx")
+                var href = e.attr("lay-href");
+                var text = e.text();
+                sf.tabAdd(href, href, text);
+                sf.tabChange(href);
+            },
+            // 关闭当前标签页
+            closeThisTabs: function () {
+                var ce = $tabHeader.children()[tabCurrentIndex];
+                if (ce && tabCurrentIndex !== 0) {
+                    sf.tabDelete($(ce).attr("lay-id"));
+                }
+            },
+            // 关闭其它标签页
+            closeOtherTabs: function () {
+                $.each($tabHeader.children(), function (index, item) {
+                    if (index !== 0 && index !== tabCurrentIndex) {
+                        sf.tabDelete($(item).attr("lay-id"));
+                    }
+                });
+                // 剩首页及当前页
+                tabCurrentIndex = 1;
+            },
+            // 关闭全部标签页
+            closeAllTabs: function () {
+                $.each($tabHeader.children(), function (index, item) {
+                    if (index !== 0) {
+                        sf.tabDelete($(item).attr("lay-id"));
+                    }
+                });
+                // 重置到首页
+                tabCurrentIndex = 0;
             }
         };
-    element.on("tab(" + menuTab + ")", function (e) {
-        debugger
+    sf.setTheme();
+    // 标签切换事件处理    
+    element.on("tab(" + menuTab + ")", function (data) {
+        tabCurrentIndex = data.index;
     });
-    element.on("tabDelete(" + menuTab + ")", function (e) {
-        debugger
-    });
-    element.on('nav(layadmin-system-side-menu)', function (elem) {
-        debugger
+    // 标签页操作nav事件处理
+    element.on("nav(layadmin-pagetabs-nav)", function (elem) {
+        var parent = elem.parent();
+        parent.removeClass(layuiThis);
+        parent.parent().removeClass(layuiShow);
     });
     // 点击事件代理及处理   
     $body.on("click", "*[layadmin-event]", function () { // 普通点击
@@ -320,7 +351,7 @@ layui.define(["element", "jquery"], function (exports) {
     }).on("click", "*[lay-href]", function () { // 页面链接
         var e = $(this);
         events.pageLink(e);
-    })
-    // 
+    });
+    // 导出模块
     exports("sf", sf);
 })

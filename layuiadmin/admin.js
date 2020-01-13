@@ -317,7 +317,8 @@ layui.define("view", function (e) {
         })
     }(), t.on("tab(" + p + ")", function (e) {
         P.tabsPage.index = e.index
-    }), P.on("tabsPage(setMenustatus)", function (e) {
+    }), P.on("tabsPage(setMenustatus)", function (e) 
+    {
         var i = e.url,
             t = function (e) {
                 return {

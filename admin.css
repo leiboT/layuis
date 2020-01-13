@@ -1,11 +1,103 @@
-/**选择配色方案 */
-.layuimini-color .color-title {padding: 10px 0 10px 20px;border-bottom: 1px solid #d9dada;margin-bottom: 8px;}
-.layuimini-color .color-content {padding: 0 5px 0 5px;}
-.layuimini-color .color-content ul {list-style: none;text-align: center;}
-.layuimini-color .color-content ul li {position: relative;display: inline-block;vertical-align: top;width: 80px;height: 50px;margin: 0 15px 15px 0;padding: 2px 2px 4px 2px;background-color: #f2f2f2;cursor: pointer;font-size: 12px;color: #666;}
-.layuimini-color .color-content li.layui-this:after, .layuimini-color .color-content li:hover:after {width: 100%;height: 100%;padding: 4px;top: -5px;left: -5px;border-color: #d8d8d8;opacity: 1;}
-.layuimini-color .color-content li:after {content: '';position: absolute;z-index: 20;top: 50%;left: 50%;width: 1px;height: 0;border: 1px solid #f2f2f2;transition: all .3s;-webkit-transition: all .3s;opacity: 0;}
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
 
+/* 主题选择面板 */
+#sfThemeBox {
+    height: 100%;
+}
+
+.sf-theme {
+    position: relative;
+    height: 100%;
+    padding-top: 42px;
+    background-color: #FFF;
+}
+
+.sf-theme .sf-theme-title {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    right: 0;
+    height: 42px;
+    line-height: 42px;
+    padding-left: 10px;
+    border-bottom: 1px solid #d9dada;
+}
+
+.sf-theme .sf-theme-content {
+    height: 100%;
+    padding: 15px 0 0 15px;
+    overflow: auto;
+}
+
+.sf-theme .sf-theme-content>li {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: 80px;
+    height: 50px;
+    margin: 0 15px 15px 0;
+    padding: 2px 2px 4px 2px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    font-size: 12px;
+    color: #666;
+}
+
+.sf-theme .sf-theme-content>li:hover::after,
+.sf-theme .sf-theme-content>li.sf-theme-active::after {
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+    top: -5px;
+    left: -5px;
+    border-color: #d8d8d8;
+}
+
+.sf-theme .sf-theme-content>li::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 1px solid transparent;
+    -webkit-transition: all .3s linear;
+    transition: all .3s linear;
+}
+
+.sf-theme .sf-theme-content>li>ul>li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.sf-theme .sf-theme-content>li>ul>li:nth-child(1) {
+    width: 20%;
+    height: 10px;
+}
+
+.sf-theme .sf-theme-content>li>ul>li:nth-child(2) {
+    width: 80%;
+    height: 10px;
+}
+
+.sf-theme .sf-theme-content>li>ul>li:nth-child(3) {
+    width: 20%;
+    height: 38px;
+}
+
+/* 主体内容 */
+#LAY_app_content {
+    position: fixed;
+    top: 90px;
+    right: 0;
+    bottom: 0;
+    left: 220px;
+    overflow: hidden;
+}
 
 html #layuicss-layuiAdmin {
     display: none;
@@ -65,6 +157,7 @@ html {
     width: 220px;
     height: 49px;
     padding: 0 15px;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     overflow: hidden;
     font-weight: 300;
@@ -230,6 +323,7 @@ html {
 .layui-layer-adminRight {
     top: 50px !important;
     bottom: 0;
+    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, .1);
     box-shadow: 1px 1px 10px rgba(0, 0, 0, .1);
     border-radius: 0;
     overflow: auto
@@ -248,6 +342,7 @@ html {
     line-height: 20px;
     padding: 10px 20px;
     border: none;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #666;
     word-wrap: break-word
@@ -449,7 +544,9 @@ html {
     line-height: 40px;
     padding: 0 80px 0 40px;
     background-color: #fff;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1)
 }
 
@@ -462,6 +559,7 @@ html {
     cursor: pointer;
     transition: all .3s;
     -webkit-transition: all .3s;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border-left: 1px solid #f6f6f6
 }
@@ -586,6 +684,7 @@ html {
 
 .layadmin-tabspage-none .layui-layout-admin .layui-header {
     border-bottom: none;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05)
 }
 
@@ -603,6 +702,7 @@ html {
 
 .layui-layout-admin .layui-header {
     border-bottom: 1px solid #f6f6f6;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     background-color: #fff
 }
@@ -632,6 +732,7 @@ html {
 
 .layui-layout-admin .layui-logo {
     background-color: #20222A;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15)
 }
 
@@ -642,12 +743,14 @@ html {
 }
 
 .layui-side-menu {
+    -webkit-box-shadow: 1px 0 2px 0 rgba(0, 0, 0, .05);
     box-shadow: 1px 0 2px 0 rgba(0, 0, 0, .05)
 }
 
 .layui-layout-admin .layui-footer {
     padding: 10px 0;
     text-align: center;
+    -webkit-box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, .05);
     box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, .05)
 }
 
@@ -988,6 +1091,7 @@ html {
 .layuiadmin-card-team li a:hover,
 .layuiadmin-card-text a:hover {
     color: #01AAED;
+    -webkit-transition: all .3s;
     transition: all .3s
 }
 
@@ -998,7 +1102,8 @@ html {
 .layuiadmin-card-status dd {
     padding: 15px 0;
     border-bottom: 1px solid #EEE;
-    display: -webkit-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex
 }
 
@@ -1278,6 +1383,7 @@ html {
     width: 20px;
     height: 100%;
     z-index: 11;
+    -webkit-box-shadow: 1px 0 2px 0 rgba(0, 0, 0, .05);
     box-shadow: 1px 0 2px 0 rgba(0, 0, 0, .05)
 }
 
@@ -1287,6 +1393,7 @@ html {
     top: 0;
     width: 100%;
     height: 10px;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15)
 }
 
@@ -1329,10 +1436,12 @@ html {
 
 @keyframes layui-rl {
     from {
+        -webkit-transform: translate3d(100%, 0, 0);
         transform: translate3d(100%, 0, 0)
     }
 
     to {
+        -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0)
     }
 }
@@ -1356,10 +1465,12 @@ html {
 
 @keyframes layui-lr {
     from {
+        -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0)
     }
 
     to {
+        -webkit-transform: translate3d(100%, 0, 0);
         transform: translate3d(100%, 0, 0)
     }
 }
