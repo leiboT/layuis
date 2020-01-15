@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>soonforERP</title>
+    <title>SoonforERP</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -11,121 +11,95 @@
     <link rel="stylesheet" href="./admin.css" media="all">
 </head>
 
-<body class="layui-layout-body" layadmin-themealias="default">
-
+<body class="layui-layout-body">
     <div id="LAY_app">
         <div class="layui-layout layui-layout-admin">
-            <div class="layui-header">
-                <!-- 头部区域 -->
-                <ul class="layui-nav layui-layout-left">
-                    <li class="layui-nav-item layadmin-flexible" lay-unselect="">
-                        <a href="javascript:;" layadmin-event="flexible" title="收起" id="LAY_app_flexible">
-                            <i class="layui-icon layui-icon-shrink-right"></i>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="layui-nav layui-layout-right">
-                    <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-                        <a href="javascript:;" layadmin-event="theme" title="主题方案">
-                            <i class="layui-icon layui-icon-theme"></i>
-                        </a>
-                    </li>
-                    <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-                        <a href="javascript:;" layadmin-event="fullscreen" title="开启全屏" id="LAY_app_fullscreen">
-                            <i class="layui-icon layui-icon-screen-full"></i>
-                        </a>
-                    </li>
-                    <li class="layui-nav-item" lay-unselect="">
-                        <a href="javascript:;">
-                            <img src="./logo.png" width="26" height="26" />
-                            <cite>管理员</cite>
-                            <span class="layui-nav-more"></span>
-                        </a>
-                        <dl class="layui-nav-child layui-anim layui-anim-upbit">
-                            <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-                            <dd><a lay-href="set/user/password.html">修改密码</a></dd>
-                            <hr>
-                            <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-                        <a href="javascript:;" layadmin-event="about"><i
-                                class="layui-icon layui-icon-more-vertical"></i></a>
-                    </li>
-                </ul>
-            </div>
-
             <!-- 侧边菜单 -->
-            <div class="layui-side layui-side-menu">
-                <div class="layui-side-scroll">
-                    <a class="layui-logo" href="">
-                        <span>SoonforERP</span>
-                    </a>
-
-                    <ul class="layui-nav layui-nav-tree" lay-shrink="" lay-filter="layadmin-system-side-menu">
-                        <li data-name="home" class="layui-nav-item">
-                            <a href="javascript:;">
-                                <i class="layui-icon layui-icon-home"></i>
-                                <cite>主页</cite>
-                            </a>
-                            <dl class="layui-nav-child">
-                                <dd>
-                                    <a href="javascript:;">控制台</a>
-                                    <dl class="layui-nav-child">
-                                        <dd>
-                                            <a lay-href="console1.html">控制台1</a>
-                                        </dd>
-                                    </dl>
-                                </dd>
-                                <dd>
-                                    <a lay-href="homepage1.html">主页一</a>
-                                </dd>
-                                <dd>
-                                    <a lay-href="homepage2.html">主页二</a>
-                                </dd>
-                            </dl>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- 页面标签 -->
-            <div class="layadmin-pagetabs" id="LAY_app_tabs">
-                <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
-                <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
-                <div class="layui-icon layadmin-tabs-control layui-icon-down">
-                    <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
-                        <li class="layui-nav-item" lay-unselect="">
-                            <a href="javascript:;"><span class="layui-nav-more"></span></a>
-                            <dl class="layui-nav-child layui-anim-fadein layui-anim layui-anim-upbit">
-                                <dd layadmin-event="closeThisTabs">
-                                    <a href="javascript:;">关闭当前标签页</a>
-                                </dd>
-                                <dd layadmin-event="closeOtherTabs">
-                                    <a href="javascript:;">关闭其它标签页</a>
-                                </dd>
-                                <dd layadmin-event="closeAllTabs">
-                                    <a href="javascript:;">关闭全部标签页</a>
-                                </dd>
-                            </dl>
-                        </li>
-                    </ul>
-                </div>
-                <div class="layui-tab" lay-allowclose="true" lay-filter="layadmin-layout-tabs">
-                    <!-- 标签 -->
-                    <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                        <li lay-id="index.html" lay-attr="index.html" class="layui-this"><i
-                                class="layui-icon layui-icon-home"></i><i
-                                class="layui-icon layui-unselect layui-tab-close"></i></li>
-                    </ul>
-                    <!-- 主体内容 -->
-                    <div class="layui-tab-content" id="LAY_app_content">
-                        <div class="layui-tab-item layui-show">
-                            <iframe width="100%" height="100%" frameborder="0" src="index.html"></iframe>
-                        </div>
+            <div class="layui-side sf-layout-left" id="LAY_app_side">
+                <a class="sf-logo" href="">
+                    <span>SoonforERP</span>
+                    <img src="./logo.png" width="30" height="30" />
+                </a>
+                <div class="sf-nav-scroll">
+                    <div class="sf-nav-scroll-box">
+                        <ul class="layui-nav layui-nav-tree" lay-filter="layadmin-side-nav"></ul>
                     </div>
                 </div>
             </div>
+            <!-- 右侧主体 -->
+            <div class="sf-layout-right" id="LAY_app_right">
+                <!-- 头部区域 -->
+                <div class="sf-layout-right-header">
+                    <a href="javascript:;" class="sf-flexible" layadmin-event="flexible" title="收起"
+                        id="LAY_app_flexible">
+                        <i class="layui-icon layui-icon-shrink-right"></i>
+                    </a>
+                    <ul class="layui-nav">
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                            <a href="javascript:;" layadmin-event="theme" title="主题方案">
+                                <i class="layui-icon layui-icon-theme"></i>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                            <a href="javascript:;" layadmin-event="fullscreen" title="开启全屏" id="LAY_app_fullscreen">
+                                <i class="layui-icon layui-icon-screen-full"></i>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item" lay-unselect="">
+                            <a href="javascript:;">
+                                <img src="./logo.png" width="26" height="26" />
+                                <cite>管理员</cite>
+                                <span class="layui-nav-more"></span>
+                            </a>
+                            <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                                <dd><a lay-href="set/user/info.html">基本资料</a></dd>
+                                <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                                <hr>
+                                <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+                            </dl>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 页面标签 -->
+                <div class="sf-page-tabs" id="LAY_app_tabs">
+                    <div class="layui-icon sf-page-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+                    <div class="layui-icon sf-page-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+                    <div class="layui-icon sf-page-tabs-control layui-icon-refresh" layadmin-event="refresh"></div>
+                    <div class="layui-icon sf-page-tabs-control layui-icon-share" layadmin-event="openInNewTab"></div>
+                    <div class="layui-icon sf-page-tabs-control layui-icon-down">
+                        <ul class="layui-nav sf-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                            <li class="layui-nav-item" lay-unselect="">
+                                <a href="javascript:;"><span class="layui-nav-more"></span></a>
+                                <dl class="layui-nav-child layui-anim-fadein layui-anim layui-anim-upbit">
+                                    <dd layadmin-event="closeThisTabs">
+                                        <a href="javascript:;">关闭当前标签页</a>
+                                    </dd>
+                                    <dd layadmin-event="closeOtherTabs">
+                                        <a href="javascript:;">关闭其它标签页</a>
+                                    </dd>
+                                    <dd layadmin-event="closeAllTabs">
+                                        <a href="javascript:;">关闭全部标签页</a>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="layui-tab" lay-unauto="" lay-allowclose="true" lay-filter="layadmin-layout-tabs">
+                        <!-- 标签 -->
+                        <ul class="layui-tab-title" id="LAY_app_tabsheader"></ul>
+                        <!-- 主体内容 -->
+                        <div class="layui-tab-content" id="LAY_app_content"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 遮罩层 -->
+            <div class="sf-body-shade" layadmin-event="shade"></div>
+            <!-- 悬浮菜单层 -->
+            <ul class="layui-nav layui-nav-tree sf-side-menu-shade">
+                <li class="layui-nav-item layui-nav-itemed"></li>
+            </ul>
+            <!-- 分割器 -->
+            <div id="LAY_app_side_split"></div>
         </div>
     </div>
 
@@ -133,6 +107,9 @@
     <script>
         layui.use(["element", "layer", "sf"], function () {
             var element = layui.element;
+            var sf = layui.sf;
+            // sf模块初始化
+            sf.init();
         })
     </script>
     <style id="LAY_layadmin_theme"></style>
