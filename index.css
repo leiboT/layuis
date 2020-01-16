@@ -84,6 +84,10 @@ html {
     transition: all .3s;
 }
 
+.sf-theme .sf-theme-content>li>ul {
+    font-size: 0;
+}
+
 .sf-theme .sf-theme-content>li>ul>li {
     display: inline-block;
     vertical-align: top;

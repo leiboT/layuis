@@ -1,4 +1,4 @@
-layui.define(["element", "jquery"], function (exports) {
+layui.define(["layer", "element", "jquery"], function (exports) {
     var $ = layui.jquery,
         element = layui.element,
         layer = layui.layer,
@@ -293,12 +293,11 @@ layui.define(["element", "jquery"], function (exports) {
                 this.setTheme();
                 this.initPageMode();
                 this.initSplit();
-                this.initMenu();
                 // 添加首页
-                this.tabAdd("index.html", "index.html", '<i\
+                this.tabAdd("indexPage.html", "indexPage.html", '<i\
                 class="layui-icon layui-icon-home"></i><i\
                 class="layui-icon layui-unselect layui-tab-close"></i>');
-                this.tabChange("index.html");
+                this.tabChange("indexPage.html");
                 // 创建主题样式html片段
                 this.themeSelectHtml = this.buildThemeSelectHtml();
                 $window.on("resize", function () {
@@ -311,90 +310,38 @@ layui.define(["element", "jquery"], function (exports) {
             /**
              * 菜单初始化
              */
-            this.initMenu = function () {
-                var data = [{
-                    title: "系统管理",
-                    icon: "layui-icon-home",
-                    url: "",
-                    child: [{
-                        title: "工厂端",
-                        icon: "layui-icon-home",
-                        url: "",
-                        child: [{
-                            title: "基础资料",
-                            icon: "layui-icon-home",
-                            url: "",
-                            child: [{
-                                title: "终端客户资料",
-                                icon: "layui-icon-home",
-                                url: "",
-                                child: [{
-                                    title: "年龄段资料",
-                                    icon: "layui-icon-home",
-                                    url: "/console.html"
-                                }, {
-                                    title: "年龄段资料1",
-                                    icon: "layui-icon-home",
-                                    url: "/console1.html"
-                                }, {
-                                    title: "年龄段资料2",
-                                    icon: "layui-icon-home",
-                                    url: "/console2.html"
-                                }, {
-                                    title: "年龄段资料3",
-                                    icon: "layui-icon-home",
-                                    url: "/console3.html"
-                                }, {
-                                    title: "年龄段资料4",
-                                    icon: "layui-icon-home",
-                                    url: "/console4.html"
-                                }, {
-                                    title: "年龄段资料5",
-                                    icon: "layui-icon-home",
-                                    url: "/console5.html"
-                                }, {
-                                    title: "年龄段资料6",
-                                    icon: "layui-icon-home",
-                                    url: "/console6.html"
-                                }, {
-                                    title: "年龄段资料7",
-                                    icon: "layui-icon-home",
-                                    url: "/console7.html"
-                                }, ]
-                            }]
-                        }]
-                    }]
-                }, {
-                    title: "权限管理",
-                    icon: "layui-icon-home",
-                    url: "/console10.html"
-                }];
+            this.initMenu = function (source, mapping) {
+                mapping = mapping || {};
+                var title = mapping.title || "title";
+                var icon = mapping.icon || "icon";
+                var url = mapping.url || "url";
+                var children = mapping.child || "children";
                 var leftMenuHtml = "";
 
-                $.each(data, function (index, menu) {
+                $.each(source, function (index, menu) {
                     leftMenuHtml += '<li class="layui-nav-item">\n';
-                    if (menu.child != undefined && menu.child != []) {
-                        leftMenuHtml += '<a href="javascript:;"><i class="layui-icon ' + menu.icon + '"></i><cite> ' + menu.title + '</cite></a>';
+                    if (menu[children] && menu[children].length) {
+                        leftMenuHtml += '<a href="javascript:;"><i class="iconfont ' + menu[icon] + '"></i><cite> ' + menu[title] + '</cite></a>';
                         var buildChildHtml = function (html, child, level) {
-                            level = level || 0;
                             var w = 38 + level * 18;
+                            level++;
                             html += '<dl class="layui-nav-child">\n';
                             $.each(child, function (childIndex, childMenu) {
                                 html += '<dd>\n';
-                                if (childMenu.child != undefined && childMenu.child != []) {
-                                    html += '<a href="javascript:;" style="padding-left: ' + w + 'px"><i class="layui-icon ' + childMenu.icon + '"></i><cite> ' + childMenu.title + '</cite></a>';
-                                    html = buildChildHtml(html, childMenu.child, ++level);
+                                if (childMenu[children] && childMenu[children].length) {
+                                    html += '<a href="javascript:;" style="padding-left: ' + w + 'px"><i class="iconfont ' + childMenu[icon] + '"></i><cite> ' + childMenu[title] + '</cite></a>';
+                                    html = buildChildHtml(html, childMenu[children], level);
                                 } else {
-                                    html += '<a href="javascript:;" style="padding-left: ' + w + 'px"  lay-href="' + childMenu.url + '"><i class="layui-icon ' + childMenu.icon + '"></i><cite> ' + childMenu.title + '</cite></a>\n';
+                                    html += '<a href="javascript:;" style="padding-left: ' + w + 'px"  lay-href="' + childMenu[url] + '"><i class="iconfont ' + childMenu[icon] + '"></i><cite> ' + childMenu[title] + '</cite></a>\n';
                                 }
                                 html += '</dd>\n';
                             });
                             html += '</dl>\n';
                             return html;
                         };
-                        leftMenuHtml = buildChildHtml(leftMenuHtml, menu.child);
+                        leftMenuHtml = buildChildHtml(leftMenuHtml, menu[children], 0);
                     } else {
-                        leftMenuHtml += '<a href="javascript:;" lay-href="' + menu.url + '"><i class="layui-icon ' + menu.icon + '"></i><cite> ' + menu.title + '</cite></a>\n';
+                        leftMenuHtml += '<a href="javascript:;" lay-href="' + menu[url] + '"><i class="iconfont ' + menu[icon] + '"></i><cite> ' + menu[title] + '</cite></a>\n';
                     }
                     leftMenuHtml += '</li>\n';
                 });
