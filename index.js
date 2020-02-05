@@ -1,4 +1,9 @@
 layui.define(["layer", "element", "jquery"], function (exports) {
+    // 已知还未处理的问题
+    // 1.字体定制
+    // 2.iframe页面主题定制（目前处理了主框架主题切换时，只是向iframe注入了同等样式）
+    // 3.侧边菜单栏收起点击会导致菜单底色都变色
+    // 4.ie8下主题定制面板样式兼容问题
     var $ = layui.jquery,
         element = layui.element,
         layer = layui.layer,
@@ -36,7 +41,7 @@ layui.define(["layer", "element", "jquery"], function (exports) {
             // 主题ID
             this.themeID = 0;
             // 侧边栏宽度
-            this.sidePageX = 0;
+            this.sidePageX = 220;
             // 字体大小
             this.fontSize = 14;
             // 侧边栏是否收起
@@ -164,14 +169,14 @@ layui.define(["layer", "element", "jquery"], function (exports) {
             this.userHabit = {
                 keys: ["themeID", "fontSize", "sidePageX", "collapsed"],
                 clearAll: function () { // 只清除用户习惯
-                    this.keys.forEach(function (key) {
+                    $.each(this.keys, function (index, key) {
                         localStorage.removeItem(key);
                     })
                 },
                 getAll: function () { // 获取所有
                     var self = this;
                     var res = {};
-                    this.keys.forEach(function (key) {
+                    $.each(this.keys, function (index, key) {
                         res[key] = self[key].get();
                     })
                     return res;
@@ -222,6 +227,64 @@ layui.define(["layer", "element", "jquery"], function (exports) {
                     clear: function () {
                         localStorage.removeItem("collapsed");
                     }
+                },
+                tabs: { // tab页签
+                    get: function () {
+                        return localStorage.getItem("tabs");
+                    },
+                    set: function (tabId, href, title) {
+                        var _tabs = this.get();
+                        if (_tabs) {
+                            _tabs = JSON.parse(_tabs);
+                        } else {
+                            _tabs = {};
+                        }
+                        _tabs[tabId] = {
+                            tabId: tabId,
+                            href: href,
+                            title: title,
+                            active: true,
+                        }
+                        localStorage.setItem("tabs", JSON.stringify(_tabs));
+                    },
+                    setActive: function (index) {
+                        var _tabs = this.get();
+                        if (_tabs) {
+                            _tabs = JSON.parse(_tabs);
+                            var i = 0;
+                            for (var key in _tabs) {
+                                if (i == index) {
+                                    _tabs[key].active = true;
+                                } else {
+                                    _tabs[key].active = false;
+                                }
+                                i++;
+                            }
+                            localStorage.setItem("tabs", JSON.stringify(_tabs));
+                        }
+                    },
+                    removeItem: function (index) {
+                        var _tabs = this.get();
+                        if (_tabs) {
+                            _tabs = JSON.parse(_tabs);
+                            var keys = [];
+                            for (var key in _tabs) {
+                                keys.push(key);
+                            }
+                            $.each(keys, function (i, key) {
+                                if (i == index) {
+                                    delete _tabs[key];
+                                }
+                                if (i == keys.length) {
+                                    _tabs[key].active = true;
+                                }
+                                localStorage.setItem("tabs", JSON.stringify(_tabs));
+                            })
+                        }
+                    },
+                    clear: function () {
+                        localStorage.removeItem("tabs");
+                    }
                 }
             }
             /**
@@ -265,7 +328,6 @@ layui.define(["layer", "element", "jquery"], function (exports) {
                             backgroundColor: ""
                         });
                         var pageX = e.pageX;
-                        _self.sidePageX = pageX;
                         _self.userHabit.sidePageX.set(pageX);
                         $side.css({
                             width: pageX
@@ -287,17 +349,16 @@ layui.define(["layer", "element", "jquery"], function (exports) {
             this.init = function () {
                 var habit = this.userHabit.getAll();
                 this.themeID = habit.themeID || 0;
-                this.sidePageX = habit.sidePageX || 0;
-                this.fontSize = habit.fontSize || 14;
+                this.sidePageX = habit.sidePageX ? Math.abs(parseFloat(habit.sidePageX)) : 220;
+                this.fontSize = habit.fontSize > 0 ? habit.fontSize : 14;
                 this.collapsed = habit.collapsed || 0;
                 this.setTheme();
                 this.initPageMode();
                 this.initSplit();
-                // 添加首页
-                this.tabAdd("indexPage.html", "indexPage.html", '<i\
-                class="layui-icon layui-icon-home"></i><i\
-                class="layui-icon layui-unselect layui-tab-close"></i>');
-                this.tabChange("indexPage.html");
+                  // 添加首页
+                  this.tabAdd("indexPage.html", "indexPage.html", '<i\
+                  class="layui-icon layui-icon-home"></i><i\
+                  class="layui-icon layui-unselect layui-tab-close"></i>');
                 // 创建主题样式html片段
                 this.themeSelectHtml = this.buildThemeSelectHtml();
                 $window.on("resize", function () {
@@ -306,6 +367,18 @@ layui.define(["layer", "element", "jquery"], function (exports) {
                         left: 0
                     })
                 });
+
+                // 初始化tabs （后面抽取）
+                var tabs = this.userHabit.tabs.get();
+                if (tabs) {
+                    tabs = JSON.parse(tabs);
+                    $.each(tabs, function (key, item) {
+                        _self.tabAdd(item.tabId, item.href, item.title);
+                        if (item.active) {
+                            _self.tabChange(key);
+                        }
+                    })
+                }
             }
             /**
              * 菜单初始化
@@ -389,6 +462,7 @@ layui.define(["layer", "element", "jquery"], function (exports) {
              */
             this.setMode = function () {
                 if (this.isPcScreen()) {
+                    $root.removeClass(spreadModeClass);
                     if (this.collapsed == 1) {
                         $shrinkToggle.attr("title", "展开");
                         $shrinkToggleIcon.attr("class", iconfont + " " + shrinkIconClass);
@@ -439,16 +513,22 @@ layui.define(["layer", "element", "jquery"], function (exports) {
                 var styleHtml = this.joinThemeClass(this.themeID);
                 $.each(list, function (index, item) {
                     var body;
-                    if (item.ref.contentWindow) {
-                        body = $(item.ref.contentWindow.window.document.body);
+                    if (item.ref.contentDocument) {
+                        body = $(item.ref.contentDocument.body);
                     } else {
-                        body = $(item.ref.body);
+                        body = $(item.ref.document.body);
                     }
                     var styleEle = body.find("#" + item.id);
                     if (styleEle.length == 0) {
                         styleEle = $('<style id="' + item.id + '"></style>')
                     }
-                    styleEle.html(styleHtml);
+                    // ie8
+                    if ("styleSheet" in styleEle[0]) {
+                        styleEle[0].setAttribute('type', 'text/css');
+                        styleEle[0].styleSheet.cssText = styleHtml;
+                    } else {
+                        styleEle.html(styleHtml);
+                    }
                     body.append(styleEle);
                 })
             }
@@ -476,7 +556,14 @@ layui.define(["layer", "element", "jquery"], function (exports) {
              */
             this.setTheme = function (themeID) {
                 this.setIframeTheme(this.iframeList);
-                $themeStyle.html(this.joinThemeClass(themeID));
+                var styles = this.joinThemeClass(themeID);
+                // ie8
+                if ("styleSheet" in $themeStyle[0]) {
+                    $themeStyle[0].setAttribute('type', 'text/css');
+                    $themeStyle[0].styleSheet.cssText = styles;
+                } else {
+                    $themeStyle.html(styles);
+                }
             };
             /**
              * 获取主题ID
@@ -534,9 +621,11 @@ layui.define(["layer", "element", "jquery"], function (exports) {
                 } else {
                     element.tabAdd(menuTab, {
                         title: title,
-                        content: '<div class="sf-anim-fadein"><iframe onload="layui.sf.subscribe(this)" width="100%" height="100%" frameborder="0" src="' + href + '"></iframe></div>',
+                        content: '<div class="sf-anim-fadein"><iframe id="' + tabId + '" onload="layui.sf.subscribe(this)" width="100%" height="100%" frameborder="0" src="' + href + '"></iframe></div>',
                         id: tabId
                     });
+                    // 缓存前台
+                    this.userHabit.tabs.set(tabId, href, title);
                 }
             };
             /**
@@ -548,13 +637,6 @@ layui.define(["layer", "element", "jquery"], function (exports) {
             };
             /**
              * 切换到指定Tab项
-             * @param tabId
-             */
-            this.tabChange = function (tabId) {
-                element.tabChange(menuTab, tabId);
-            };
-            /**
-             * 选中指定menu
              * @param tabId
              */
             this.tabChange = function (tabId) {
@@ -795,9 +877,11 @@ layui.define(["layer", "element", "jquery"], function (exports) {
     // 标签切换事件处理    
     element.on("tab(" + menuTab + ")", function (data) {
         tabCurrentIndex = data.index;
+        sf.userHabit.tabs.setActive(data.index);
     });
     // 标签删除事件处理  
     element.on("tabDelete(" + menuTab + ")", function (data) {
+        sf.userHabit.tabs.removeItem(data.index);
         if (data.index < tabCurrentIndex) {
             tabCurrentIndex -= 1;
         }

@@ -135,6 +135,8 @@ html {
     color: #FFF;
     font-weight: 300;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .sf-layout-left .sf-logo img {
@@ -373,6 +375,7 @@ html {
     overflow: hidden;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
+    background-color: #F2F2F2;
 }
 
 .sf-layout-right .layui-tab-content .layui-tab-item {
@@ -395,7 +398,7 @@ html {
 .sf-side-menu-shade {
     position: fixed;
     left: 62px;
-    width: 150px;
+    width: 200px;
     z-index: 9999;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
